@@ -1,17 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
-import Header from './components/Header'
-import Navbar from './components/Navbar'
-import MainBody from './components/MainBody'
+import HomePage from './features/HomePage';
+import DatasetPage from './features/DatasetPage';
+import BGPLLaMA from './features/BGPLLaMA';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes
+} from 'react-router-dom';
 
 
 function App() {
   return (
-    <div className="App m-0">
-      <Header />
-      <Navbar />
-      <MainBody />
+    <Router>
+      <div className="App m-0">
+        <main>
+          <Routes>
+            {/* <Route exact path='/' Component={HomePage} />
+            <Route path='/dataset' Component={DatasetPage} /> */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/dataset" element={<DatasetPage />} />
+            <Route path="/bgp_llama" element={<BGPLLaMA />} />
+          </Routes>
+        </main>
     </div>
+    </Router>
   );
 }
 
