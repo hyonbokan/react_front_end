@@ -16,7 +16,7 @@ const BGPLLaMa = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch('http://localhost:8000/bgp_llama?query=' + encodeURIComponent(query))
+        fetch('http://localhost:8000/api/bgp_llama?query=' + encodeURIComponent(query))
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -24,6 +24,7 @@ const BGPLLaMa = () => {
                 return response.json();
             })
             .then(data => {
+                console.log(data)
                 setOutput(data.output);
                 setExistingQueries(data.queries);
             })
@@ -44,11 +45,11 @@ const BGPLLaMa = () => {
             <div className="w-1/5">
             <h2 className="font-bold mb-2">Existing Queries</h2>
             <ul className="border p-2">
-                {existingQueries.map((query, index) => (
+                {/* {existingQueries.map((query, index) => (
                 <li key={index} className="mb-1">
                     {query}
                 </li>
-                ))}
+                ))} */}
             </ul>
             </div>
 
