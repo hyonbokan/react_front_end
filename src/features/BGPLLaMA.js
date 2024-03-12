@@ -1,6 +1,7 @@
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 import React, { useState } from 'react';
 
@@ -9,13 +10,16 @@ const BGPLLaMa = () => {
     const [output, setOutput] = useState('');
     const [existingQueries, setExistingQueries] = useState([]);
     const [error, setError] = useState(null);
+    const [isLoaing, setIsLoading] = useState(false);
 
     const handleQueryChange = (event) => {
         setQuery(event.target.value);
     };
 
     const handleSubmit = (event) => {
-        event.preventDefault();
+        event.preventDefault(); // what does this do?
+        setIsLoading(true);
+
         fetch('http://localhost:8000/api/bgp_llama?query=' + encodeURIComponent(query))
             .then(response => {
                 if (!response.ok) {
@@ -24,13 +28,18 @@ const BGPLLaMa = () => {
                 return response.json();
             })
             .then(data => {
-                console.log(data)
+                console.log('Data:',data);
+                console.log('Query:',data.queries);
+                console.log('Output:',data.output);
                 setOutput(data.output);
-                setExistingQueries(data.queries);
+                setExistingQueries(data.query);
             })
             .catch(error => {
                 console.error('There was a problem with your fetch operation:', error);
                 setError('There was a problem with your fetch operation: ' + error.message);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     };
 
@@ -45,6 +54,9 @@ const BGPLLaMa = () => {
             <div className="w-1/5">
             <h2 className="font-bold mb-2">Existing Queries</h2>
             <ul className="border p-2">
+                {/* 1. load the recent queries
+                2. show the last 5 queries on the left size */}
+                
                 {/* {existingQueries.map((query, index) => (
                 <li key={index} className="mb-1">
                     {query}
@@ -69,16 +81,22 @@ const BGPLLaMa = () => {
                     onChange={handleQueryChange}
                 />
                 </div>
-                <button
-                type="submit"
-                className="bg-gray-700 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
-                >
-                Submit
+                {isLoaing ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                    <CircularProgress />
+                </Box>
+                ) : (
+                    <button
+                    type="submit"
+                    className="bg-gray-700 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+                    >
+                    Submit
                 </button>
+                )}
             </form>
 
             {/* Model Output Section */}
-            {output && (
+            {!isLoaing && output && (
                 <div className="mt-4">
                 <h3 className="font-bold mb-2">Your query:</h3>
                 <div className="border p-2">
@@ -88,7 +106,7 @@ const BGPLLaMa = () => {
             )}
             </div>
         </div>
-    </div>
+        </div>
     </div>
   );
 };
