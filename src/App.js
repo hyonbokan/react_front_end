@@ -1,4 +1,3 @@
-import './App.css';
 import HomePage from './features/HomePage';
 import DatasetPage from './features/DatasetPage';
 import BGPLLaMA from './features/BGPLLaMA';
@@ -15,8 +14,6 @@ function App() {
       <div className="App m-0">
         <main>
           <Routes>
-            {/* <Route exact path='/' Component={HomePage} />
-            <Route path='/dataset' Component={DatasetPage} /> */}
             <Route path="/" element={<HomePage />} />
             <Route path="/dataset" element={<DatasetPage />} />
             <Route path="/bgp_llama" element={<BGPLLaMA />} />
